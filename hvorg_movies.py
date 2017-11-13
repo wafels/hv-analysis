@@ -39,13 +39,15 @@ movie_mid_point = [movie_start_time[i] + datetime.timedelta(seconds=0.5*movie_du
 # various movie times
 time_difference = np.asarray([(request_time[i] - movie_start_time[i]).total_seconds() for i in range(0, nmovies)])
 
-# Clean for negative values
-td = time_difference[time_difference > 0]
+# Clean for negative values of time differences
+positive_duration = time_difference > 0
+td = time_difference[positive_duration]
+md = movie_durations[positive_duration]
 
 # How many good movies?
 ngood = len(td)
 
-# Apply units for ease
+# Apply units - makes handling time durations much easier.
 td = td * u.s
 
 # Minimum and maximum values
@@ -55,12 +57,12 @@ td_max = td.max()
 # Time difference in days
 td_range = td_max - td_min
 
-# Histogram the data
+# Figure 1
+# A plot of all the time differences
 this_unit = u.day
 overall_td_bins = 100
 overall_td = np.histogram(td.to(this_unit).value, bins=overall_td_bins)
 
-# Make a simple plot
 fig = plt.figure()
 ax = fig.add_subplot(111)
 plt.hist(td.to(this_unit).value, bins=overall_td_bins)
@@ -71,7 +73,8 @@ plt.ylabel('number of movies')
 plt.title('helioviewer.org movies\n time difference between time of request and movie start time')
 plt.show()
 
-# Look at the movies with less than 30 days
+# Figure 2
+# Look at the time differences of movies with time differences less than 30 days
 td_short_limit = 30*u.day
 td_short = td[td < td_short_limit]
 td_short_unit = u.day
@@ -86,3 +89,10 @@ plt.xlabel('time difference ({:s})'.format(str(td_short_unit)))
 plt.ylabel('number of movies')
 plt.title('helioviewer.org movies\n time difference between time of request and movie start time < {:s}'.format(td_short_limit))
 plt.show()
+
+# Figure 3
+# Plot a histogram of movie durations
+
+
+# Figure 4
+# Scatter plot of time difference versus movie duration
