@@ -12,23 +12,35 @@ img = os.path.expanduser('~/hvp/hv-analysis/img')
 imgfiletype = 'png'
 
 # Times we are interested in
-d = {1*u.hour: {"color": "k", "linestyle": "dotted", "color": "r"},
-     3*u.hour: {"color": "k", "linestyle": "dotted", "color": "k"},
-     6*u.hour: {"color": "k", "linestyle": "dotted", "color": "orange"},
-     1*u.day: {"color": "k", "linestyle": "dashed", "color": "r"},
-     7*u.day: {"color": "k", "linestyle": "dashed", "color": "k"},
-     28*u.day: {"color": "k", "linestyle": "dashed", "color": "orange"},
-     365*u.day: {"color": "k", "linestyle": "solid", "color": "orange"}
+d = {1*u.hour: {"linestyle": "dotted", "color": "r"},
+     3*u.hour: {"linestyle": "dotted", "color": "k"},
+     6*u.hour: {"linestyle": "dotted", "color": "orange"},
+     1*u.day: {"linestyle": "dashed", "color": "r"},
+     7*u.day: {"linestyle": "dashed", "color": "k"},
+     28*u.day: {"linestyle": "dashed", "color": "orange"},
+     365*u.day: {"linestyle": "solid", "color": "orange"}
      }
 
 # LaTeX description of dates and durations
 dates = {"Tmrequest": "$T_{request}$",
          "Tmstart": "$T_{start}$",
          "Tmend": "$T_{end}$",
-         "Tmidpoint": "$T_{midpoint}$"}
+         "Tmmidpoint": "$T_{midpoint}$"}
 
-durations = {"tmduration": "$t_{duration}$",
-             "tmtopicality": "$t_{topicality}$"}
+durations = {"tmduration": ["$t_{duration}$", "requested duration"],
+             "tmtopicality": ["$t_{topicality}$", "requested topicality"]}
+
+
+# Helioviewer Project Dates
+hv_project_dates = {"hv_bigbreak_start": {"date": "2015-07-09 00:00:00", "kwargs": {"linestyle": "solid", "color": "k"}},
+                    "hv_bigbreak_end": {"date": "2015-10-01 00:00:00", "kwargs": {"linestyle": "dashed", "color": "k"}},
+                    "hv_version3_launch": {"date": "2016-03-29 00:00:00", "kwargs": {"linestyle": "dotted", "color": "k"}}
+                    }
+
+# Solar physics events
+solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00", "kwargs":{"linestyle": "solid", "color": "r"}},
+                        "tse2017": {"date": "2017-08-21 00:00:00", "kwargs": {"linestyle": "dashed", "color": "r"}}
+                        }
 
 
 # Order the dictionary according to the keys
@@ -44,6 +56,16 @@ def relevant_lines(this_d, tr=[0.0, 1.0]*u.day):
         if tr[0] <= key <= tr[1]:
             rl[key] = deepcopy(this_d[key])
     return order_dictionary(rl)
+
+
+# Number of movies label
+def mlabel(n, brackets='[]'):
+    return "number of movies\n{{{:s}}}{{{:s}}}{{{:s}}}".format(brackets[0], str(n), brackets[1])
+
+
+# Quantity label
+def qlabel(a, b, c):
+    return '{{{:s}}} ({{{:s}}}) [{{{:s}}}]'.format(a, b, c)
 
 
 # Clean a filename for use with Overleaf

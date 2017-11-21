@@ -92,7 +92,8 @@ for i, data_source_names in enumerate(df.DataSourceNames.tolist()):
                 all_data_source_names.append(dsn)
 
 
-df_new = pd.DataFrame(index=df.index, columns=all_sources)
+df_new = pd.DataFrame(0, index=df.index, columns=all_sources)
+df_new.index.name = 'movie number'
 
 # Save the source ID information
 for this_index in df.index:
@@ -100,8 +101,6 @@ for this_index in df.index:
     ids = source_id.split(',')
     for id in ids:
         df_new.loc[this_index, id] = 1
-    else:
-        df_new.loc[this_index, id] = 0
 
 # Save the source ID information
 f = os.path.join(save_directory, 'source_ids.csv')
