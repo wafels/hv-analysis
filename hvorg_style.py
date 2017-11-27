@@ -34,13 +34,22 @@ durations = {"tmduration": ["$t_{duration}$", "requested duration"],
 # Helioviewer Project Dates
 hv_project_dates = {"hv_bigbreak_start": {"date": "2015-07-09 00:00:00", "kwargs": {"linestyle": "solid", "color": "k"}},
                     "hv_bigbreak_end": {"date": "2015-10-01 00:00:00", "kwargs": {"linestyle": "dashed", "color": "k"}},
-                    "hv_version3_launch": {"date": "2016-03-29 00:00:00", "kwargs": {"linestyle": "dotted", "color": "k"}}
+                    "hv_version3_launch": {"date": "2016-03-29 00:00:00", "kwargs": {"linestyle": "dotted", "color": "k"}},
+                    "hv_smallbreak_start": {"date": "2015-07-09 00:00:00", "kwargs": {"linestyle": "solid", "color": "k"}},
+                    "hv_smallbreak_end": {"date": "2015-10-01 00:00:00", "kwargs": {"linestyle": "dashed", "color": "k"}},
                     }
 
 # Solar physics events
-solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00", "kwargs":{"linestyle": "solid", "color": "r"}},
-                        "tse2017": {"date": "2017-08-21 00:00:00", "kwargs": {"linestyle": "dashed", "color": "r"}}
+solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00",
+                                        "kwargs": {"label": "June 7 2011 failed eruption", "linestyle": "solid", "color": "r"}},
+                        "tse2017": {"date": "2017-08-21 00:00:00",
+                                    "kwargs": {"label": "total solar eclipse", "linestyle": "dashed", "color": "r"}},
+                        "transit_of_venus": {"date": "2012-06-06 00:00:00",
+                                             "kwargs": {"label": "transit of Venus", "linestyle": "dot-dashed", "color": "r"}},
+                        "comet_ison": {"date": "2013-11-28 00:00:00",
+                                       "kwargs": {"label": "Comet ISON", "linestyle": "dot-dashed", "color": "g"}}
                         }
+
 
 
 # Order the dictionary according to the keys
@@ -60,7 +69,7 @@ def relevant_lines(this_d, tr=[0.0, 1.0]*u.day):
 
 # Number of movies label
 def mlabel(n, brackets='[]'):
-    return "number of movies\n{{{:s}}}{{{:s}}}{{{:s}}}".format(brackets[0], str(n), brackets[1])
+    return "number of movies\n{{{:s}}}{{{:s}}} total{{{:s}}}".format(brackets[0], str(n), brackets[1])
 
 
 # Quantity label

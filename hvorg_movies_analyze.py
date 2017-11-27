@@ -7,9 +7,9 @@ import pickle
 from copy import deepcopy
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.dates as dates
 import pandas as pd
 import astropy.units as u
+from sunpy.time import parse_time
 import hvorg_style as hvos
 plt.rc('text', usetex=True)
 plt.rc('font', size=14)
@@ -23,44 +23,54 @@ directory = os.path.expanduser('~/Data/hvanalysis/derived')
 # Image output location
 img = hvos.img
 
+# application
+application = 'helioviewer.org'
+
+# data product
+data_product = 'movies'
+
 # Type of data we are looking at
-data_type = 'helioviewer.org movies ({:s})'.format(restriction)
+data_analyzed = '{:s} {:s}'.format(application, data_product)
+data_type = '{:s} ({:s})'.format(data_analyzed, restriction)
 
 # How much time did the movie cover?
-f = os.path.join(directory, "movie_durations.npy")
+f = os.path.join(directory, "hvorg_movie_durations_seconds.npy")
 movie_durations = np.load(f)
 durations_subtitle = "{:s} = {:s} - {:s}".format(hvos.durations['tmduration'][0], hvos.dates['Tmend'], hvos.dates['Tmstart'])
 
+# Save the time information
+f = os.path.join(directory, 'hvorg_movie_mid_point_seconds.npy')
+movie_mid_point = np.load(f)
+
+# Time difference
+f = os.path.join(directory, 'hvorg_movie_time_difference_seconds.npy')
+time_difference = np.load(f)
+
 # Movie start times
-f = os.path.join(directory, "movie_start_time.pkl")
+f = os.path.join(directory, "hvorg_movie_start_time.pkl")
 movie_start_time = pickle.load(open(f, 'rb'))
 movie_start_time_date = hvos.dates['Tmstart']
 
-# Movie start times
-f = os.path.join(directory, "movie_mid_point.pkl")
-movie_mid_point = pickle.load(open(f, 'rb'))
-movie_mid_point_date = hvos.dates['Tmmidpoint']
-
 # Movie end times
-f = os.path.join(directory, "movie_end_time.pkl")
+f = os.path.join(directory, "hvorg_movie_end_time.pkl")
 movie_end_time = pickle.load(open(f, 'rb'))
 movie_end_time_date = hvos.dates['Tmend']
 
-# The time the movie was requested
-f = os.path.join(directory, "request_time.pkl")
-request_time = pickle.load(open(f, 'rb'))
+# Movie request times
+f = os.path.join(directory, "hvorg_movie_request_time.pkl")
+movie_request_time = pickle.load(open(f, 'rb'))
 
 # Number of movies
 nmovies = len(movie_start_time)
 
 # Topicality - calculate the time difference between the time of the request and the
 # movie start time.
-topicality = np.asarray([(request_time[i] - movie_start_time[i]).total_seconds() for i in range(0, nmovies)])
+topicality = np.asarray([(movie_request_time[i] - movie_start_time[i]).total_seconds() for i in range(0, nmovies)])
 topicality_subtitle = "{:s} = {:s} - {:s}".format(hvos.durations['tmtopicality'][0], hvos.dates['Tmrequest'], movie_start_time_date)
 
 # near_real_time - calculate the time difference between the time of the request and the
 # movie end time.
-near_real_time = np.asarray([(request_time[i] - movie_end_time[i]).total_seconds() for i in range(0, nmovies)])
+near_real_time = np.asarray([(movie_request_time[i] - movie_end_time[i]).total_seconds() for i in range(0, nmovies)])
 
 # The movie has a non-zero duration
 positive_duration = movie_durations > 0
@@ -214,7 +224,8 @@ plt.savefig(filepath)
 
 # Figure 6
 # Number of requests as a function of time
-df = pd.DataFrame(request_time, columns=['date'])
+title = 'movies per quarter'
+df = pd.DataFrame(movie_request_time, columns=['date'])
 # Setting the date as the index since the TimeGrouper works on Index, the date column is not dropped to be able to count
 df.set_index('date', drop=False, inplace=True)
 
@@ -224,12 +235,79 @@ ax = fig.add_subplot(111)
 h = df.groupby(pd.TimeGrouper(freq='Q')).count()
 h.rename(columns={'date': 'movies'}, inplace=True)
 h.plot(kind='bar', ax=ax)
-ax.xaxis_date()
-ax.xaxis.set_major_formatter(dates.AutoDateFormatter(dates.AutoDateLocator))
-ax.set_title('movies per quarter')
-ax.set_ylabel(hvos.mlabel(len(request_time)))
+new_ticks = []
+for dt in h.index:
+    new_ticks.append(dt.to_datetime())
+ax.set_xticklabels([dt.strftime('%Y-%m-%d') for dt in new_ticks])
+ax.set_title(title)
+ax.set_ylabel(hvos.mlabel(len(movie_request_time)))
 ax.set_xlabel('date')
-ax.grid(True, linestyle='dotted')
+ax.xaxis.set_tick_params(labelsize=10)
+ax.grid(linestyle='dotted')
+fig.autofmt_xdate(rotation=65)
+# Major events
+ax.fill_betweenx(np.arange(0, 60000),
+                 parse_time(hvos.hv_project_dates["hv_bigbreak_start"]["date"]),
+                 parse_time(hvos.hv_project_dates["hv_bigbreak_end"]["date"]),
+                 hatch='X', facecolor='w', label='helioviewer.org down')
+plt.legend()
 plt.tight_layout()
-plt.show()
+filename = hvos.overleaf(os.path.join(data_type, title))
+filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
+filepath = os.path.join(img, filename)
+plt.savefig(filepath)
 
+# Figure 7
+# Daily numbers as a plot
+title = 'daily movies requested'
+plt.close('all')
+fig = plt.figure()
+ax = fig.add_subplot(111)
+h = df.groupby(pd.TimeGrouper(freq='D')).count()
+h.rename(columns={'date': 'movies'}, inplace=True)
+
+movies_per_day = np.asarray(list(h["movies"]))
+mean = np.int(np.rint(np.mean(movies_per_day)))
+median = np.int(np.rint(np.median(movies_per_day)))
+h.plot(kind='line', ax=ax)
+ax.axhline(mean, color='r', linestyle='dashed', label='mean ({{{:n}}})'.format(mean))
+ax.axhline(median, color='k', linestyle='dashed', label='median ({{{:n}}})'.format(median))
+ax.set_title(title)
+ax.set_ylabel(hvos.mlabel(len(movie_request_time)))
+ax.set_xlabel('date')
+ylim_max = 1.1*np.max(movies_per_day)
+ax.set_ylim(0, ylim_max)
+# Major events
+ax.fill_betweenx((0, ylim_max),
+                 parse_time(hvos.hv_project_dates["hv_bigbreak_start"]["date"]),
+                 parse_time(hvos.hv_project_dates["hv_bigbreak_end"]["date"]),
+                 facecolor='r', label='helioviewer.org down', alpha=0.5)
+ax.axvline(parse_time(hvos.solar_physics_events["june7_event"]),
+           **hvos.solar_physics_events["kwargs"])
+plt.grid('on', linestyle='dotted')
+plt.legend()
+plt.tight_layout()
+filename = hvos.overleaf(os.path.join(data_type, title))
+filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
+filepath = os.path.join(img, filename)
+plt.savefig(filepath)
+
+
+# Figure 8
+# Distribution of the number of movies made per day
+title = 'distribution of number of {{{:s}}} per day'.format(data_analyzed)
+plt.close('all')
+plt.hist(movies_per_day, bins=60, label='movies')
+plt.axvline(mean, color='r', linestyle='dashed', label='mean ({{{:n}}})'.format(mean))
+plt.axvline(median, color='k', linestyle='dashed', label='median ({{{:n}}})'.format(median))
+plt.yscale('log')
+plt.xlabel('number of movies per day')
+plt.ylabel('number of days\n[{{{:n}}} total]'.format(len(movies_per_day)))
+plt.title('{{{:s}}}\n[{{{:n}}} total]'.format(title, np.sum(movies_per_day)))
+plt.grid('on', linestyle='dotted')
+plt.legend()
+plt.tight_layout()
+filename = hvos.overleaf(os.path.join(data_type, 'histogram_number_of_movies_per_day'))
+filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
+filepath = os.path.join(img, filename)
+plt.savefig(filepath)

@@ -18,6 +18,17 @@ hvorg_movies = 'movies.csv'
 path = os.path.expanduser(os.path.join(directory, hvorg_movies))
 df = pd.read_csv(path)
 
+hvorg_legacy_movies = 'movies_legacy.csv'
+path = os.path.expanduser(os.path.join(directory, hvorg_legacy_movies))
+df_legacy = pd.read_csv(path)
+
+# Change the IDs of the legacy movies so they are unique
+df_legacy.loc[:, "id"] = df_legacy.loc[:, "id"] + 10**(1 + np.int(np.ceil(np.log10(len(df)))))
+
+# Append the legacy movies
+df = df.append(df_legacy, ignore_index=True)
+
+
 data_type = 'helioviewer.org movies'
 
 # Get some figures of merit for the movies
@@ -45,22 +56,22 @@ movie_mid_point = [movie_start_time[i] + datetime.timedelta(seconds=0.5*movie_du
 time_difference = np.asarray([(request_time[i] - movie_start_time[i]).total_seconds() for i in range(0, nmovies)])
 
 # Save the time information
-f = os.path.join(save_directory, 'movie_durations')
+f = os.path.join(save_directory, 'hvorg_movie_durations_seconds.npy')
 np.save(f, movie_durations)
 
-f = os.path.join(save_directory, 'movie_mid_point')
+f = os.path.join(save_directory, 'hvorg_movie_mid_point_seconds.npy')
 np.save(f, movie_mid_point)
 
-f = os.path.join(save_directory, 'time_difference')
+f = os.path.join(save_directory, 'hvorg_movie_time_difference_seconds.npy')
 np.save(f, time_difference)
 
-f = os.path.join(save_directory, 'request_time.pkl')
+f = os.path.join(save_directory, 'hvorg_movie_request_time.pkl')
 pickle.dump(request_time, open(f, 'wb'))
 
-f = os.path.join(save_directory, 'movie_start_time.pkl')
+f = os.path.join(save_directory, 'hvorg_movie_start_time.pkl')
 pickle.dump(movie_start_time, open(f, 'wb'))
 
-f = os.path.join(save_directory, 'movie_end_time.pkl')
+f = os.path.join(save_directory, 'hvorg_movie_end_time.pkl')
 pickle.dump(movie_end_time, open(f, 'wb'))
 
 
@@ -103,9 +114,9 @@ for this_index in df.index:
         df_new.loc[this_index, id] = 1
 
 # Save the source ID information
-f = os.path.join(save_directory, 'source_ids.csv')
+f = os.path.join(save_directory, 'hvorg_data_source_ids.csv')
 df_new.to_csv(f)
 
 # Save the data source names
-f = os.path.join(save_directory, 'data_source_names.pkl')
+f = os.path.join(save_directory, 'hvorg_data_source_names.pkl')
 pickle.dump(all_data_source_names, open(f, 'wb'))
