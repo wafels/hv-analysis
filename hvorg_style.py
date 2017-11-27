@@ -32,22 +32,42 @@ durations = {"tmduration": ["$t_{duration}$", "requested duration"],
 
 
 # Helioviewer Project Dates
-hv_project_dates = {"hv_bigbreak_start": {"date": "2015-07-09 00:00:00", "kwargs": {"linestyle": "solid", "color": "k"}},
-                    "hv_bigbreak_end": {"date": "2015-10-01 00:00:00", "kwargs": {"linestyle": "dashed", "color": "k"}},
-                    "hv_version3_launch": {"date": "2016-03-29 00:00:00", "kwargs": {"linestyle": "dotted", "color": "k"}},
-                    "hv_smallbreak_start": {"date": "2015-07-09 00:00:00", "kwargs": {"linestyle": "solid", "color": "k"}},
-                    "hv_smallbreak_end": {"date": "2015-10-01 00:00:00", "kwargs": {"linestyle": "dashed", "color": "k"}},
+hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
+                                 "date_end": "2015-09-23 00:00:00",
+                                 "kwargs": {"facecolor": 'r',
+                                            "label": '?',
+                                            "alpha": 0.2
+                                            }
+                                 },
+                    "smallbreak": {"date_start": "2015-11-20 00:00:00",
+                                   "date_end": "2016-03-26 00:00:00",
+                                   "kwargs": {"facecolor": 'g',
+                                              "label": '?',
+                                              "alpha": 0.2
+                                            }
+                                   },
+                    "repair": {"date_start": "2011-08-11 00:00:00",
+                               "date_end": "2011-09-18 00:00:00",
+                               "kwargs": {"facecolor": 'k',
+                                          "label": 'server repair',
+                                          "alpha": 0.2
+                                          }
+                               },
+                    "hvorg3": {"date": "2016-03-29 00:00:00",
+                               "kwargs": {"color": 'k',
+                                          "label": 'helioviewer.org 3.0 released'
+                                         }
+                            }
                     }
-
 # Solar physics events
 solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00",
-                                        "kwargs": {"label": "June 7 2011 failed eruption", "linestyle": "solid", "color": "r"}},
+                                        "kwargs": {"label": "failed eruption (2011-06-07)", "linestyle": "solid", "color": "r"}},
                         "tse2017": {"date": "2017-08-21 00:00:00",
-                                    "kwargs": {"label": "total solar eclipse", "linestyle": "dashed", "color": "r"}},
+                                    "kwargs": {"label": "total solar eclipse", "linestyle": "--", "color": "r"}},
                         "transit_of_venus": {"date": "2012-06-06 00:00:00",
-                                             "kwargs": {"label": "transit of Venus", "linestyle": "dot-dashed", "color": "r"}},
+                                             "kwargs": {"label": "transit of Venus", "linestyle": "-.", "color": "r"}},
                         "comet_ison": {"date": "2013-11-28 00:00:00",
-                                       "kwargs": {"label": "Comet ISON", "linestyle": "dot-dashed", "color": "g"}}
+                                       "kwargs": {"label": "Comet ISON (2013-11-28)", "linestyle": "-.", "color": "g"}}
                         }
 
 

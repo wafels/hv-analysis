@@ -13,6 +13,7 @@ from sunpy.time import parse_time
 import hvorg_style as hvos
 plt.rc('text', usetex=True)
 plt.rc('font', size=14)
+figsize = (10, 5)
 
 restriction = 'observable'
 #restriction = 'positive requested duration'
@@ -150,7 +151,7 @@ plt.savefig(filepath)
 # Figure 3
 # Plot a histogram of movie durations
 md_unit = u.year
-fig = plt.figure()
+fig = plt.figure(figsize=figsize)
 ax = fig.add_subplot(111)
 plt.hist(md.to(md_unit).value, bins=100)
 ax.grid(True, linestyle='dotted')
@@ -245,11 +246,6 @@ ax.set_xlabel('date')
 ax.xaxis.set_tick_params(labelsize=10)
 ax.grid(linestyle='dotted')
 fig.autofmt_xdate(rotation=65)
-# Major events
-ax.fill_betweenx(np.arange(0, 60000),
-                 parse_time(hvos.hv_project_dates["hv_bigbreak_start"]["date"]),
-                 parse_time(hvos.hv_project_dates["hv_bigbreak_end"]["date"]),
-                 hatch='X', facecolor='w', label='helioviewer.org down')
 plt.legend()
 plt.tight_layout()
 filename = hvos.overleaf(os.path.join(data_type, title))
@@ -261,7 +257,7 @@ plt.savefig(filepath)
 # Daily numbers as a plot
 title = 'daily movies requested'
 plt.close('all')
-fig = plt.figure()
+fig = plt.figure(figsize=figsize)
 ax = fig.add_subplot(111)
 h = df.groupby(pd.TimeGrouper(freq='D')).count()
 h.rename(columns={'date': 'movies'}, inplace=True)
@@ -277,13 +273,17 @@ ax.set_ylabel(hvos.mlabel(len(movie_request_time)))
 ax.set_xlabel('date')
 ylim_max = 1.1*np.max(movies_per_day)
 ax.set_ylim(0, ylim_max)
-# Major events
-ax.fill_betweenx((0, ylim_max),
-                 parse_time(hvos.hv_project_dates["hv_bigbreak_start"]["date"]),
-                 parse_time(hvos.hv_project_dates["hv_bigbreak_end"]["date"]),
-                 facecolor='r', label='helioviewer.org down', alpha=0.5)
-ax.axvline(parse_time(hvos.solar_physics_events["june7_event"]),
-           **hvos.solar_physics_events["kwargs"])
+# Project events
+for event in ('repair', 'bigbreak', 'smallbreak'):
+    ax.fill_betweenx((0, ylim_max),
+                     parse_time(hvos.hv_project_dates[event]["date_start"]),
+                     parse_time(hvos.hv_project_dates[event]["date_end"]),
+                     **hvos.hv_project_dates[event]["kwargs"])
+
+# Solar physics events
+for event in ("june7_event", "comet_ison"):
+    ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
+               **hvos.solar_physics_events[event]["kwargs"])
 plt.grid('on', linestyle='dotted')
 plt.legend()
 plt.tight_layout()
