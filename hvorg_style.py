@@ -35,17 +35,10 @@ durations = {"tmduration": ["$t_{duration}$", "requested duration"],
 hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
                                  "date_end": "2015-09-23 00:00:00",
                                  "kwargs": {"facecolor": 'r',
-                                            "label": '?',
+                                            "label": 'helioviewer.org down',
                                             "alpha": 0.2
                                             }
                                  },
-                    "smallbreak": {"date_start": "2015-11-20 00:00:00",
-                                   "date_end": "2016-03-26 00:00:00",
-                                   "kwargs": {"facecolor": 'g',
-                                              "label": '?',
-                                              "alpha": 0.2
-                                            }
-                                   },
                     "repair": {"date_start": "2011-08-11 00:00:00",
                                "date_end": "2011-09-18 00:00:00",
                                "kwargs": {"facecolor": 'k',
@@ -63,13 +56,15 @@ hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
 
 # Solar physics events
 solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00",
-                                        "kwargs": {"label": "failed eruption (2011-06-07)", "linestyle": "solid", "color": "r"}},
+                                        "kwargs": {"label": "failed eruption (2011/06/07)", "linestyle": "solid", "color": "r"}},
                         "tse2017": {"date": "2017-08-21 00:00:00",
                                     "kwargs": {"label": "total solar eclipse", "linestyle": "--", "color": "r"}},
                         "transit_of_venus": {"date": "2012-06-06 00:00:00",
                                              "kwargs": {"label": "transit of Venus", "linestyle": "-.", "color": "r"}},
                         "comet_ison": {"date": "2013-11-28 00:00:00",
-                                       "kwargs": {"label": "Comet ISON (2013-11-28)", "linestyle": "-.", "color": "g"}}
+                                       "kwargs": {"label": "Comet ISON (2013/11/28)", "linestyle": "-.", "color": "g"}},
+                        "flare_flurry2017": {"date": "2017-09-08 00:00:00",
+                                             "kwargs": {"label": "large flares (2017/09/6-10)", "linestyle": ":", "color": "g"}}
                         }
 
 

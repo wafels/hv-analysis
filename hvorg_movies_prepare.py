@@ -5,9 +5,13 @@
 import os
 import datetime
 import pickle
+import json
 import numpy as np
 import pandas as pd
 from sunpy.time import parse_time
+
+# The sources ids
+get_sources_ids = 'getDataSources.json'
 
 # Save the data
 save_directory = os.path.expanduser('~/Data/hvanalysis/derived')
@@ -15,6 +19,7 @@ save_directory = os.path.expanduser('~/Data/hvanalysis/derived')
 # Read in the data
 directory = os.path.expanduser('~/Data/hvanalysis/source')
 hvorg_movies = 'movies.csv'
+hvorg_movies = 'movies_20171128.csv'
 path = os.path.expanduser(os.path.join(directory, hvorg_movies))
 df = pd.read_csv(path)
 
@@ -102,16 +107,41 @@ for i, data_source_names in enumerate(df.DataSourceNames.tolist()):
             if dsn not in all_data_source_names:
                 all_data_source_names.append(dsn)
 
+# Analyze the Helioviewer getsourcesid return - map the sourceIds to the nicknames
+f = os.path.expanduser(os.path.join(directory, get_sources_ids))
+j = json.load(open(f, 'r'))
 
+
+def id_generator(dict_var):
+    for k, v in dict_var.items():
+        if k == "sourceId":
+            yield dict_var["sourceId"], dict_var["nickname"]
+        elif isinstance(v, dict):
+            for id_val in id_generator(v):
+                yield id_val
+
+source_ids_and_nicknames = list(id_generator(j))
+f = os.path.join(save_directory, 'hvorg_sourceids_and_nicknames.pkl')
+pickle.dump(source_ids_and_nicknames, open(f, 'wb'))
+
+# Create a new dataframe that explicitly holds which data source was used in each movie
 df_new = pd.DataFrame(0, index=df.index, columns=all_sources)
 df_new.index.name = 'movie number'
-
-# Save the source ID information
 for this_index in df.index:
     source_id = df.loc[this_index, "DataSourceID"]
     ids = source_id.split(',')
     for id in ids:
         df_new.loc[this_index, id] = 1
+
+# Change the column names to the easier to understand source nicknames
+df_new_column_names = list(df_new.columns.values)
+for df_new_column_name in df_new_column_names:
+    for source_id_and_nickname in source_ids_and_nicknames:
+        this_source_id = source_id_and_nickname[0]
+        this_nickname = source_id_and_nickname[1]
+        if df_new_column_name == str(this_source_id):
+            df_new.rename(columns={df_new_column_name: this_nickname}, inplace=True)
+
 
 # Save the source ID information
 f = os.path.join(save_directory, 'hvorg_data_source_ids.csv')
@@ -120,3 +150,7 @@ df_new.to_csv(f)
 # Save the data source names
 f = os.path.join(save_directory, 'hvorg_data_source_names.pkl')
 pickle.dump(all_data_source_names, open(f, 'wb'))
+
+# Save the data source IDs
+f = os.path.join(save_directory, 'hvorg_data_source_ids.pkl')
+pickle.dump(all_sources, open(f, 'wb'))

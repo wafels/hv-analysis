@@ -36,5 +36,5 @@ data_analyzed = '{:s} {:s}'.format(application, data_product)
 data_type = '{:s} ({:s})'.format(data_analyzed, restriction)
 
 # Load in the sources file
-f = os.path.join(directory, "hvorg_data_source_ids.csv")
-sources_used = pd.read_csv(f)
+f = os.path.join(directory, 'hvorg_data_source_names.pkl')
+hvorg_data_source_names = pickle.load(open(f, 'rb'))

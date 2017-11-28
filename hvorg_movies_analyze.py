@@ -275,18 +275,18 @@ ax.set_xlabel('date')
 ylim_max = 1.1*np.max(movies_per_day)
 ax.set_ylim(0, ylim_max)
 # Project events
-for event in ('repair', 'bigbreak', 'smallbreak'):
+for event in ('repair', 'bigbreak'):
     ax.fill_betweenx((0, ylim_max),
                      parse_time(hvos.hv_project_dates[event]["date_start"]),
                      parse_time(hvos.hv_project_dates[event]["date_end"]),
                      **hvos.hv_project_dates[event]["kwargs"])
 
 # Solar physics events
-for event in ("june7_event", "comet_ison"):
+for event in ("june7_event", "comet_ison", "flare_flurry2017"):
     ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
                **hvos.solar_physics_events[event]["kwargs"])
 plt.grid('on', linestyle='dotted')
-plt.legend()
+plt.legend(framealpha=0.2)
 plt.tight_layout()
 filename = hvos.overleaf(os.path.join(data_type, title))
 filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
@@ -306,7 +306,7 @@ plt.xlabel('number of movies per day')
 plt.ylabel('number of days\n[{{{:n}}} total]'.format(len(movies_per_day)))
 plt.title('{{{:s}}}\n[{{{:n}}} total]'.format(title, np.sum(movies_per_day)))
 plt.grid('on', linestyle='dotted')
-plt.legend()
+plt.legend(framealpha=0.2)
 plt.tight_layout()
 filename = hvos.overleaf(os.path.join(data_type, 'histogram_number_of_movies_per_day'))
 filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
