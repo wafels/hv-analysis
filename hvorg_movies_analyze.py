@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import astropy.units as u
 from sunpy.time import parse_time
+
 import hvorg_style as hvos
 plt.rc('text', usetex=True)
 plt.rc('font', size=14)

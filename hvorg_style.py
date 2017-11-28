@@ -56,9 +56,11 @@ hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
                     "hvorg3": {"date": "2016-03-29 00:00:00",
                                "kwargs": {"color": 'k',
                                           "label": 'helioviewer.org 3.0 released'
-                                         }
-                            }
+                                          }
+                               }
                     }
+
+
 # Solar physics events
 solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00",
                                         "kwargs": {"label": "failed eruption (2011-06-07)", "linestyle": "solid", "color": "r"}},
@@ -69,7 +71,6 @@ solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00",
                         "comet_ison": {"date": "2013-11-28 00:00:00",
                                        "kwargs": {"label": "Comet ISON (2013-11-28)", "linestyle": "-.", "color": "g"}}
                         }
-
 
 
 # Order the dictionary according to the keys
