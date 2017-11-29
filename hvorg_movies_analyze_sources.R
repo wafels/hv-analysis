@@ -11,7 +11,7 @@ filepath = "/home/ireland/Data/hvanalysis/derived/hvorg_data_source_ids.csv"
 sourcesused <- read.csv(file=filepath, header=TRUE, sep=",")
 
 # Save the output as a TIFF image
-tiff(filename="/home/ireland/Desktop/nnn.tiff", width=1500, height=500)
+png(filename="/home/ireland/hvp/hv-analysis/img/hvorg_movies_data_sources.png", width=1500, height=750)
 
 # Create the UpSet plot
 upset(sourcesused, text.scale=2, nsets=10, order.by="freq", number.angle=10, scale.intersections='log10')
