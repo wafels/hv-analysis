@@ -10,12 +10,15 @@ import numpy as np
 import pandas as pd
 from sunpy.time import parse_time
 
+# The sources ids
+get_sources_ids = 'getDataSources.json'
+
 # Save the data
 save_directory = os.path.expanduser('~/Data/hvanalysis/derived')
 
 # Read in the data
 directory = os.path.expanduser('~/Data/hvanalysis/source')
-jhv_movies = 'movies.csv'
+jhv_movies = 'jpx.csv'
 path = os.path.expanduser(os.path.join(directory, jhv_movies))
 df = pd.read_csv(path)
 
@@ -23,6 +26,7 @@ data_type = 'Jhelioviewer movies'
 
 # Get some figures of merit for the movies
 # When was the movie requested?
+print('Parsing movie times')
 request_time = [parse_time(x) for x in df.timestamp.tolist()]
 
 # What was the movie start time?
@@ -46,6 +50,7 @@ movie_mid_point = [movie_start_time[i] + datetime.timedelta(seconds=0.5*movie_du
 time_difference = np.asarray([(request_time[i] - movie_start_time[i]).total_seconds() for i in range(0, nmovies)])
 
 # Save the time information
+print('Saving movie time information')
 f = os.path.join(save_directory, 'jhv_movie_durations_seconds.npy')
 np.save(f, movie_durations)
 
@@ -65,6 +70,60 @@ f = os.path.join(save_directory, 'jhv_movie_end_time.pkl')
 pickle.dump(movie_end_time, open(f, 'wb'))
 
 
+# Analyze the sourceID column.  Split it up, find the unique elements,
+# and create a data frame.
+all_sources = []
+for source_id in df.DataSourceID.tolist():
+    ids = str(source_id).split(',')
+    for id in ids:
+        if id not in all_sources:
+            all_sources.append(id)
+
+
+def extract_data_source_names(a, removal_type='all'):
+    if removal_type == 'all':
+        b = a.replace(" ", "")
+        b = b.split(',')
+    if removal_type == 'lr':
+        b = a.strip()
+        b = b.split(' , ')
+    return b
+
+all_data_source_names = []
+for i, data_source_names in enumerate(df.DataSourceNames.tolist()):
+    if isinstance(data_source_names, str):
+        dsns = extract_data_source_names(data_source_names, removal_type='lr')
+        for dsn in dsns:
+            if dsn not in all_data_source_names:
+                all_data_source_names.append(dsn)
+
+# Analyze the Helioviewer getsourcesid return - map the sourceIds to the nicknames
+f = os.path.expanduser(os.path.join(directory, get_sources_ids))
+j = json.load(open(f, 'r'))
+
+
+def id_generator(dict_var):
+    for k, v in dict_var.items():
+        if k == "sourceId":
+            yield dict_var["sourceId"], dict_var["nickname"]
+        elif isinstance(v, dict):
+            for id_val in id_generator(v):
+                yield id_val
+
+source_ids_and_nicknames = list(id_generator(j))
+#f = os.path.join(save_directory, 'hvorg_sourceids_and_nicknames.pkl')
+#pickle.dump(source_ids_and_nicknames, open(f, 'wb'))
+
+# Create a new dataframe that explicitly holds which data source was used in each movie
+print('Create a new dataframe that explicitly holds which data source was used in each movie')
+df_new = pd.DataFrame(0, index=df.index, columns=all_sources)
+df_new.index.name = 'movie number'
+for this_index in df.index:
+    source_id = df.loc[this_index, "DataSourceID"]
+    ids = str(source_id).split(',')
+    for id in ids:
+        df_new.loc[this_index, id] = 1
+
 # Change the column names to the easier to understand source nicknames
 df_new_column_names = list(df_new.columns.values)
 for df_new_column_name in df_new_column_names:
@@ -78,3 +137,11 @@ for df_new_column_name in df_new_column_names:
 # Save the source ID information
 f = os.path.join(save_directory, 'jhv_data_source_ids.csv')
 df_new.to_csv(f)
+
+# Save the data source names
+f = os.path.join(save_directory, 'jhv_data_source_names.pkl')
+pickle.dump(all_data_source_names, open(f, 'wb'))
+
+# Save the data source IDs
+f = os.path.join(save_directory, 'jhv_data_source_ids.pkl')
+pickle.dump(all_sources, open(f, 'wb'))

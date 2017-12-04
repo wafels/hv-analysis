@@ -1,9 +1,8 @@
 #
-# Analysis of the hvorg screenshots
+# Prepare of the hvorg screenshots
 #
 
 import os
-import datetime
 import pickle
 import json
 import numpy as np
@@ -19,14 +18,14 @@ save_directory = os.path.expanduser('~/Data/hvanalysis/derived')
 # Read in the data
 directory = os.path.expanduser('~/Data/hvanalysis/source')
 hvorg_screenshots = 'screenshots.csv'
-hvorg_screenshots = 'screenshots_test.csv'
+# hvorg_screenshots = 'screenshots_test.csv'
 f = os.path.join(directory, hvorg_screenshots)
 print('Loading ' + f)
 path = os.path.expanduser(f)
 df = pd.read_csv(path)
 
 hvorg_screenshots_legacy = 'screenshots_legacy.csv'
-hvorg_screenshots_legacy = 'screenshots_test.csv'
+# hvorg_screenshots_legacy = 'screenshots_test.csv'
 f = os.path.join(directory, hvorg_screenshots_legacy)
 print('Loading ' + f)
 path = os.path.expanduser(f)
@@ -60,8 +59,6 @@ request_time_validity, request_time = parse_timestamps(df.timestamp.tolist())
 print('Calculating screenshot observation time')
 observation_time_validity, obs_time = parse_timestamps(df.ObservationDate.tolist())
 
-
-
 # Calculate the time difference between the time of the request and the
 # screenshot time.  The start time is used since this is the only one that
 # can
@@ -78,6 +75,12 @@ np.save(f, time_difference)
 
 f = os.path.join(save_directory, 'hvorg_screenshot_request_time.pkl')
 pickle.dump(request_time, open(f, 'wb'))
+
+f = os.path.join(save_directory, 'hvorg_screenshot_request_time_validity.pkl')
+pickle.dump(request_time_validity, open(f, 'wb'))
+
+f = os.path.join(save_directory, 'hvorg_screenshot_observation_time_validity.pkl')
+pickle.dump(observation_time_validity, open(f, 'wb'))
 
 
 # Analyze the Helioviewer getsourcesid return - map the sourceIds to the nicknames
@@ -101,6 +104,7 @@ all_sources = [str(sian[0]) for sian in source_ids_and_nicknames]
 
 
 # Create a new dataframe that explicitly holds which data source was used in each screenshot
+print('Creating a new dataframe that explicitly holds which data source was used in each screenshot')
 df_new = pd.DataFrame(0, index=df.index, columns=all_sources)
 df_new.index.name = 'screenshot number'
 for this_index in df.index:

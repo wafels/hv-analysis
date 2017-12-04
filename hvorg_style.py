@@ -25,7 +25,8 @@ d = {1*u.hour: {"linestyle": "dotted", "color": "r"},
 dates = {"Tmrequest": "$T_{request}$",
          "Tmstart": "$T_{start}$",
          "Tmend": "$T_{end}$",
-         "Tmmidpoint": "$T_{midpoint}$"}
+         "Tmmidpoint": "$T_{midpoint}$",
+         "Tsdate": "$T_{obs}$"}
 
 durations = {"tmduration": ["$t_{duration}$", "requested duration"],
              "tmtopicality": ["$t_{topicality}$", "requested topicality"]}
@@ -35,20 +36,25 @@ durations = {"tmduration": ["$t_{duration}$", "requested duration"],
 hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
                                  "date_end": "2015-09-23 00:00:00",
                                  "kwargs": {"facecolor": 'r',
-                                            "label": 'helioviewer.org down',
+                                            "label": 'GSFC server down',
                                             "alpha": 0.2
                                             }
                                  },
                     "repair": {"date_start": "2011-08-11 00:00:00",
                                "date_end": "2011-09-18 00:00:00",
                                "kwargs": {"facecolor": 'k',
-                                          "label": 'server repair',
+                                          "label": 'GSFC server repair',
                                           "alpha": 0.2
                                           }
                                },
                     "hvorg3": {"date": "2016-03-29 00:00:00",
                                "kwargs": {"color": 'k',
                                           "label": 'helioviewer.org 3.0 released'
+                                          }
+                               },
+                    "newjhv": {"date": "2016-03-31 00:00:00",
+                               "kwargs": {"color": 'k',
+                                          "label": 'JHelioviewer 2.10 released'
                                           }
                                }
                     }
@@ -84,8 +90,8 @@ def relevant_lines(this_d, tr=[0.0, 1.0]*u.day):
 
 
 # Number of movies label
-def mlabel(n, brackets='[]'):
-    return "number of movies\n{{{:s}}}{{{:s}}} total{{{:s}}}".format(brackets[0], str(n), brackets[1])
+def mlabel(n, data_type='movies', brackets='[]'):
+    return "number of {{{:s}}}\n{{{:s}}}{{{:s}}} total{{{:s}}}".format(data_type, brackets[0], str(n), brackets[1])
 
 
 # Quantity label

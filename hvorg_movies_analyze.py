@@ -16,8 +16,20 @@ plt.rc('text', usetex=True)
 plt.rc('font', size=14)
 figsize = (10, 5)
 
+# application
+application = 'helioviewer.org'
+# application = 'JHelioviewer'
+
+if application == 'helioviewer.org':
+    application_short = 'hvorg'
+if application == 'JHelioviewer':
+    application_short = 'jhv'
+
+# data product
+data_product = 'movies'
+
+# restriction = 'positive requested duration'
 restriction = 'observable'
-#restriction = 'positive requested duration'
 
 # How to calculate the topicality
 topicality_calculated_using = 'movie_end_time'
@@ -27,12 +39,6 @@ directory = os.path.expanduser('~/Data/hvanalysis/derived')
 
 # Image output location
 img = hvos.img
-
-# application
-application = 'helioviewer.org'
-
-# data product
-data_product = 'movies'
 
 # Type of data we are looking at
 data_analyzed = '{:s} {:s}'.format(application, data_product)
@@ -330,12 +336,17 @@ for event in ('repair', 'bigbreak'):
                      parse_time(hvos.hv_project_dates[event]["date_end"]),
                      **hvos.hv_project_dates[event]["kwargs"])
 
+for event in ("hvorg3",):
+    ax.axvline(parse_time(hvos.hv_project_dates[event]["date"]),
+               **hvos.hv_project_dates[event]["kwargs"])
+
+
 # Solar physics events
 for event in ("june7_event", "comet_ison", "flare_flurry2017"):
     ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
                **hvos.solar_physics_events[event]["kwargs"])
 plt.grid('on', linestyle='dotted')
-plt.legend(framealpha=0.2, facecolor='y')
+plt.legend(framealpha=0.9, facecolor='y')
 plt.tight_layout()
 filename = hvos.overleaf(os.path.join(data_type, title))
 filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)

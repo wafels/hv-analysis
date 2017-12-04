@@ -1,5 +1,5 @@
 #
-# Analysis of the hvorg_movies
+# Prepare the hvorg_movies
 #
 
 import os
