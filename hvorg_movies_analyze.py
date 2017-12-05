@@ -38,7 +38,7 @@ topicality_calculated_using = 'movie_end_time'
 directory = os.path.expanduser('~/Data/hvanalysis/derived')
 
 # Image output location
-img = hvos.img
+img = os.path.join(os.path.expanduser(hvos.img), application)
 
 # Type of data we are looking at
 data_analyzed = '{:s} {:s}'.format(application, data_product)

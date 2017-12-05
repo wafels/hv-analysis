@@ -20,15 +20,15 @@ figsize = (10, 5)
 # Read in the data
 directory = os.path.expanduser('~/Data/hvanalysis/derived')
 
-# Image output location
-img = hvos.img
-
 # application
 application = 'helioviewer.org'
 application_short = 'hvorg'
 
 # data product
 data_product = 'embeds'
+
+# Image output location
+img = os.path.join(os.path.expanduser(hvos.img), application)
 
 
 # Type of data we are looking at
@@ -61,7 +61,7 @@ for dt in h.index:
     new_ticks.append(dt.to_datetime())
 ax.set_xticklabels([dt.strftime('%Y-%m-%d') for dt in new_ticks])
 ax.set_title(title)
-ax.set_ylabel(hvos.mlabel(len(movie_request_time)))
+ax.set_ylabel(hvos.mlabel(len(movie_request_time), data_type=data_product))
 ax.set_xlabel('date')
 ax.xaxis.set_tick_params(labelsize=10)
 ax.grid(linestyle='dotted')
@@ -89,7 +89,7 @@ h.plot(kind='line', ax=ax)
 ax.axhline(mean, color='r', linestyle='dashed', label='mean ({{{:n}}})'.format(mean))
 ax.axhline(median, color='k', linestyle='dashed', label='median ({{{:n}}})'.format(median))
 ax.set_title(title)
-ax.set_ylabel(hvos.mlabel(len(movie_request_time)))
+ax.set_ylabel(hvos.mlabel(len(movie_request_time), data_type=data_product))
 ax.set_xlabel('date')
 ylim_max = 1.1*np.max(movies_per_day)
 ax.set_ylim(0, ylim_max)
@@ -114,7 +114,7 @@ plt.savefig(filepath)
 
 
 # Figure 8
-# Distribution of the number of moviembedses made per day
+# Distribution of the number of embeds made per day
 title = 'distribution of number of {{{:s}}} per day'.format(data_analyzed)
 plt.close('all')
 plt.hist(movies_per_day, bins=60, label='embeds')
@@ -122,12 +122,13 @@ plt.axvline(mean, color='r', linestyle='dashed', label='mean ({{{:n}}})'.format(
 plt.axvline(median, color='k', linestyle='dashed', label='median ({{{:n}}})'.format(median))
 plt.yscale('log')
 plt.xlabel('number of embeds per day')
-plt.ylabel('number of days\n[{{{:n}}} total]'.format(len(movies_per_day)))
+plt.ylabel(hvos.mlabel(len(movies_per_day), data_type='days'))
+#plt.ylabel('number of days\n[{{{:n}}} total]'.format(len(movies_per_day)))
 plt.title('{{{:s}}}\n[{{{:n}}} total]'.format(title, np.sum(movies_per_day)))
 plt.grid('on', linestyle='dotted')
 plt.legend(framealpha=0.2)
 plt.tight_layout()
-filename = hvos.overleaf(os.path.join(data_type, 'histogram_number_of_movies_per_day'))
+filename = hvos.overleaf(os.path.join(data_type, 'histogram_per_day'))
 filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
 filepath = os.path.join(img, filename)
 plt.savefig(filepath)

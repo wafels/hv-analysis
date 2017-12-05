@@ -21,8 +21,6 @@ topicality_calculated_using = 'movie_end_time'
 # Read in the data
 directory = os.path.expanduser('~/Data/hvanalysis/derived')
 
-# Image output location
-img = hvos.img
 
 # application
 application = 'JHelioviewer'
@@ -31,6 +29,8 @@ application_short = 'jhv'
 # data product
 data_product = 'movies'
 
+# Image output location
+img = os.path.join(os.path.expanduser(hvos.img), application)
 
 # Type of data we are looking at
 data_analyzed = '{:s} {:s}'.format(application, data_product)

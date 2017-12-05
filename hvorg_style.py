@@ -54,6 +54,7 @@ hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
                                },
                     "newjhv": {"date": "2016-03-31 00:00:00",
                                "kwargs": {"color": 'k',
+                                          "linestyle": "-.",
                                           "label": 'JHelioviewer 2.10 released'
                                           }
                                }
@@ -68,9 +69,9 @@ solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00",
                         "transit_of_venus": {"date": "2012-06-06 00:00:00",
                                              "kwargs": {"label": "transit of Venus", "linestyle": "-.", "color": "r"}},
                         "comet_ison": {"date": "2013-11-28 00:00:00",
-                                       "kwargs": {"label": "Comet ISON (2013/11/28)", "linestyle": "-.", "color": "g"}},
+                                       "kwargs": {"label": "Comet ISON (2013/11/28)", "linestyle": "-.", "color": "m"}},
                         "flare_flurry2017": {"date": "2017-09-08 00:00:00",
-                                             "kwargs": {"label": "large flares (2017/09/6-10)", "linestyle": ":", "color": "g"}}
+                                             "kwargs": {"label": "large flares (2017/09/6-10)", "linestyle": "--", "color": "m"}}
                         }
 
 
