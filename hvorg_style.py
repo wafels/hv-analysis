@@ -40,16 +40,23 @@ quantity = {"hvm": "$n_{hv}$", "jhvm": "$n_{jhv}$",
 hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
                                  "date_end": "2015-09-23 00:00:00",
                                  "kwargs": {"facecolor": 'r',
-                                            "label": 'GSFC server down',
+                                            "label": 'GSFC server down (2015/02/04 - 2015/09/23)',
                                             "alpha": 0.2
                                             }
                                  },
                     "repair": {"date_start": "2011-08-11 00:00:00",
                                "date_end": "2011-09-18 00:00:00",
                                "kwargs": {"facecolor": 'k',
-                                          "label": 'GSFC server repair',
+                                          "label": 'GSFC server repair (2011/08/11 - 2011/09/18)',
                                           "alpha": 0.2
                                           }
+                               },
+                    "shutdown2013": {"date_start": "2013-10-01 00:00:00",
+                                     "date_end": "2013-10-16 00:00:00",
+                                     "kwargs": {"facecolor": 'g',
+                                                "label": 'U.S. Fed. Gov. shutdown (2013/10/01 - 2013/10/16)',
+                                                "alpha": 0.4
+                                                }
                                },
                     "hvorg3": {"date": "2016-03-29 00:00:00",
                                "kwargs": {"color": 'k',

@@ -94,10 +94,10 @@ ax.fill_between(x, s2, s3, label='JHelioviewer movie requests\n{{{:s}}}'.format(
 ax.set_title("service usage expressed as fraction of total daily usage")
 ax.set_ylabel("fractional use")
 subtitle = '{{{:s}}} - {{{:s}}}'.format(str(start_time.date()), str(end_time.date()))
-ax.set_xlabel('date\n{{{:s}}}'.format(subtitle))
+ax.set_xlabel('date\n({{{:s}}})'.format(subtitle))
 ax.set_ylim(0, 1.1)
 # Project events
-for event in ('bigbreak',):
+for event in ('bigbreak', 'shutdown2013'):
     ax.fill_betweenx((0, 1.1),
                      parse_time(hvos.hv_project_dates[event]["date_start"]),
                      parse_time(hvos.hv_project_dates[event]["date_end"]),
@@ -112,7 +112,7 @@ for event in ("comet_ison", "flare_flurry2017"):
     ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
                **hvos.solar_physics_events[event]["kwargs"])
 plt.grid('on', linestyle='dotted')
-plt.legend(fontsize=9, framealpha=0.4, facecolor='y')
+plt.legend(fontsize=8, framealpha=0.4, facecolor='y', loc='upper left')
 plt.tight_layout()
 filename = hvos.overleaf(os.path.join('fractional_service_usage'))
 filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)

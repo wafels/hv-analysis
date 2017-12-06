@@ -81,7 +81,7 @@ fig = plt.figure(figsize=figsize)
 ax = fig.add_subplot(111)
 h = df.groupby(pd.TimeGrouper(freq='D')).count()
 h.rename(columns={'date': 'embeds'}, inplace=True)
-
+subtitle = '({{{:s}}} - {{{:s}}})'.format(str(h.index.min().to_pydatetime().date()), str(h.index.max().to_pydatetime().date()))
 movies_per_day = np.asarray(list(h["embeds"]))
 mean = np.int(np.rint(np.mean(movies_per_day)))
 median = np.int(np.rint(np.median(movies_per_day)))
@@ -90,11 +90,11 @@ ax.axhline(mean, color='r', linestyle='dashed', label='mean ({{{:n}}})'.format(m
 ax.axhline(median, color='k', linestyle='dashed', label='median ({{{:n}}})'.format(median))
 ax.set_title(title)
 ax.set_ylabel(hvos.mlabel(len(movie_request_time), data_type=data_product))
-ax.set_xlabel('date')
+ax.set_xlabel('date\n{{{:s}}}'.format(subtitle))
 ylim_max = 1.1*np.max(movies_per_day)
 ax.set_ylim(0, ylim_max)
 # Project events
-for event in ('bigbreak',):
+for event in ('bigbreak', "shutdown2013"):
     ax.fill_betweenx((0, ylim_max),
                      parse_time(hvos.hv_project_dates[event]["date_start"]),
                      parse_time(hvos.hv_project_dates[event]["date_end"]),
@@ -109,7 +109,7 @@ for event in ("comet_ison", "flare_flurry2017"):
     ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
                **hvos.solar_physics_events[event]["kwargs"])
 plt.grid('on', linestyle='dotted')
-plt.legend(framealpha=0.4, facecolor='y')
+plt.legend(framealpha=0.4, facecolor='y', fontsize=9)
 plt.tight_layout()
 filename = hvos.overleaf(os.path.join(data_type, title))
 filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
