@@ -75,7 +75,7 @@ plt.savefig(filepath)
 
 # Figure 7
 # Daily numbers as a plot
-title = '{:s} daily embeds requested'.format(application)
+title = '{:s} daily embeds requested ({{{:s}}})'.format(application, hvos.quantity['hve'])
 plt.close('all')
 fig = plt.figure(figsize=figsize)
 ax = fig.add_subplot(111)
@@ -100,12 +100,16 @@ for event in ('bigbreak',):
                      parse_time(hvos.hv_project_dates[event]["date_end"]),
                      **hvos.hv_project_dates[event]["kwargs"])
 
+for event in ("hvorg3",):
+    ax.axvline(parse_time(hvos.hv_project_dates[event]["date"]),
+               **hvos.hv_project_dates[event]["kwargs"])
+
 # Solar physics events
 for event in ("comet_ison", "flare_flurry2017"):
     ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
                **hvos.solar_physics_events[event]["kwargs"])
 plt.grid('on', linestyle='dotted')
-plt.legend(framealpha=0.9, facecolor='y')
+plt.legend(framealpha=0.4, facecolor='y')
 plt.tight_layout()
 filename = hvos.overleaf(os.path.join(data_type, title))
 filename = '{:s}.{:s}'.format(filename, hvos.imgfiletype)
@@ -121,9 +125,8 @@ plt.hist(movies_per_day, bins=60, label='embeds')
 plt.axvline(mean, color='r', linestyle='dashed', label='mean ({{{:n}}})'.format(mean))
 plt.axvline(median, color='k', linestyle='dashed', label='median ({{{:n}}})'.format(median))
 plt.yscale('log')
-plt.xlabel('number of embeds per day')
+plt.xlabel('number of embeds per day ({{{:s}}})'.format(hvos.quantity['hve']))
 plt.ylabel(hvos.mlabel(len(movies_per_day), data_type='days'))
-#plt.ylabel('number of days\n[{{{:n}}} total]'.format(len(movies_per_day)))
 plt.title('{{{:s}}}\n[{{{:n}}} total]'.format(title, np.sum(movies_per_day)))
 plt.grid('on', linestyle='dotted')
 plt.legend(framealpha=0.2)

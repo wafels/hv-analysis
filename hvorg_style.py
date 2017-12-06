@@ -31,6 +31,10 @@ dates = {"Tmrequest": "$T_{request}$",
 durations = {"tmduration": ["$t_{duration}$", "requested duration"],
              "tmtopicality": ["$t_{topicality}$", "requested topicality"]}
 
+# Quantities
+quantity = {"hvm": "$n_{hv}$", "jhvm": "$n_{jhv}$",
+            "hve": "$m_{hv}$"}
+
 
 # Helioviewer Project Dates
 hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
@@ -93,6 +97,10 @@ def relevant_lines(this_d, tr=[0.0, 1.0]*u.day):
 # Number of movies label
 def mlabel(n, data_type='movies', brackets='[]'):
     return "number of {{{:s}}}\n{{{:s}}}{{{:s}}} total{{{:s}}}".format(data_type, brackets[0], str(n), brackets[1])
+
+
+def tlabel(n, brackets='[]', suffix='total'):
+    return "{{{:s}}}{{{:s}}} {{{:s}}}{{{:s}}}".format(brackets[0], str(n), suffix, brackets[1])
 
 
 # Quantity label
