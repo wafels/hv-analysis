@@ -16,6 +16,9 @@ plt.rc('text', usetex=True)
 plt.rc('font', size=14)
 figsize = (10, 5)
 
+# Event annotation style
+edit = 1
+
 # application
 application = 'service_comparison'
 # application = 'JHelioviewer'
@@ -111,6 +114,31 @@ for event in ("hvorg3", "newjhv"):
 for event in ("comet_ison", "flare_flurry2017"):
     ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
                **hvos.solar_physics_events[event]["kwargs"])
+
+for i, event in enumerate(("hvorg3", "newjhv")):
+    this_event = hvos.hv_project_dates[event]
+    if edit == 0:
+        ax.axvline(parse_time(this_event["date"]), **this_event["kwargs"])
+    elif edit == 1:
+        t = parse_time(this_event["date"])
+        t_pd = str(t.date())
+        y = 0.2 + i*0.2
+        plt.axvline(t, color='r', linestyle=":", linewidth=0.5)
+        plt.text(t, y, this_event["label"], **this_event["kwargs_text"])
+
+# Solar physics events
+for i, event in enumerate(("comet_ison", "flare_flurry2017")):
+    this_event = hvos.solar_physics_events[event]
+    if edit == 0:
+        ax.axvline(parse_time(this_event["date"]), **this_event["kwargs"])
+    elif edit == 1:
+        t = parse_time(this_event["date"])
+        t_pd = str(t.date())
+        y = 0.2 + i*0.2
+        plt.axvline(t, color='r', linestyle=":", linewidth=0.5)
+        plt.text(t, y, this_event["label"], **this_event["kwargs_text"])
+
+
 plt.grid('on', linestyle='dotted')
 plt.legend(fontsize=8, framealpha=0.4, facecolor='y', loc='upper left')
 plt.tight_layout()

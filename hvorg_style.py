@@ -59,30 +59,81 @@ hv_project_dates = {"bigbreak": {"date_start": "2015-02-04 00:00:00",
                                                 }
                                },
                     "hvorg3": {"date": "2016-03-29 00:00:00",
+                               "label": 'HV.org 3.0 released\n(2016-03-29)',
                                "kwargs": {"color": 'k',
-                                          "label": 'helioviewer.org 3.0 released'
-                                          }
+                                          "linewidth": 0.5
+                                          },
+                               "kwargs_text": {"bbox": dict(facecolor='yellow', alpha=0.5),
+                                               "fontsize": 9,
+                                                        "horizontalalignment": 'center'
+                                               }
                                },
                     "newjhv": {"date": "2016-03-31 00:00:00",
+                               "label": 'JHV 2.10 released\n(2016-03-31)',
                                "kwargs": {"color": 'k',
                                           "linestyle": "-.",
-                                          "label": 'JHelioviewer 2.10 released'
-                                          }
+                                          "linewidth": 0.5
+                                          },
+                               "kwargs_text": {"bbox": dict(facecolor='yellow', alpha=0.5),
+                                               "fontsize": 9,
+                                                        "horizontalalignment": 'center'
+                                               }
                                }
                     }
 
 
 # Solar physics events
 solar_physics_events = {"june7_event": {"date": "2011-06-07 06:30:00",
-                                        "kwargs": {"label": "failed eruption (2011/06/07)", "linestyle": "solid", "color": "r"}},
+                                        "label": "failed eruption\n(2011/06/07)",
+                                        "kwargs": {"linestyle": "solid",
+                                                   "color": "r",
+                                                   "linewidth": 0.5},
+                                        "kwargs_text": {"bbox": dict(facecolor='yellow', alpha=0.5),
+                                                        "fontsize": 9,
+                                                        "horizontalalignment": 'center'
+                                                        }
+                                        },
                         "tse2017": {"date": "2017-08-21 00:00:00",
-                                    "kwargs": {"label": "total solar eclipse", "linestyle": "--", "color": "r"}},
+                                    "label": "total solar eclipse",
+                                    "kwargs": {"linestyle": "--",
+                                               "color": "r",
+                                               "linewidth": 0.5},
+                                    "kwargs_text": {"bbox": dict(facecolor='yellow', alpha=0.5),
+                                                    "fontsize": 9,
+                                                        "horizontalalignment": 'center'
+                                                    }
+                                    },
                         "transit_of_venus": {"date": "2012-06-06 00:00:00",
-                                             "kwargs": {"label": "transit of Venus", "linestyle": "-.", "color": "r"}},
+                                             "label": "transit of Venus",
+                                             "kwargs": {"linestyle": "-.",
+                                                        "color": "r",
+                                                        "linewidth": 0.5},
+                                             "kwargs_text": {"bbox": dict(facecolor='yellow', alpha=0.5),
+                                                             "fontsize": 9,
+                                                        "horizontalalignment": 'center'
+                                                             }
+                                             },
                         "comet_ison": {"date": "2013-11-28 00:00:00",
-                                       "kwargs": {"label": "Comet ISON (2013/11/28)", "linestyle": "-.", "color": "m"}},
+                                       "label": "Comet ISON\n(2013/11/28)",
+                                       "kwargs": {"linestyle": "-.",
+                                                  "color": "m",
+                                                  "linewidth": 0.5},
+                                       "kwargs_text": {"bbox": dict(facecolor='yellow', alpha=0.5),
+                                                       "fontsize": 9,
+                                                       "horizontalalignment": 'center',
+                                                       "zorder": 1000
+                                                      }
+                                       },
                         "flare_flurry2017": {"date": "2017-09-08 00:00:00",
-                                             "kwargs": {"label": "large flares (2017/09/6-10)", "linestyle": "--", "color": "m"}}
+                                             "label": "large flares\n(2017/09/6-10)",
+                                             "kwargs": {"linestyle": "--",
+                                                        "color": "m",
+                                                        "linewidth": 0.5},
+                                             "kwargs_text": {"bbox": dict(facecolor='yellow', alpha=0.5),
+                                                             "fontsize": 9,
+                                                        "horizontalalignment": 'center'
+                                                             }
+                                             }
                         }
 
 

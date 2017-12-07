@@ -28,6 +28,9 @@ if application == 'JHelioviewer':
 # data product
 data_product = 'movies'
 
+# Event annotation style
+edit = 1
+
 # restriction = 'positive requested duration'
 restriction = 'observable'
 
@@ -337,15 +340,39 @@ for event in ('repair', 'bigbreak', "shutdown2013"):
                      parse_time(hvos.hv_project_dates[event]["date_end"]),
                      **hvos.hv_project_dates[event]["kwargs"])
 
-for event in ("hvorg3",):
-    ax.axvline(parse_time(hvos.hv_project_dates[event]["date"]),
-               **hvos.hv_project_dates[event]["kwargs"])
 
+for i, event in enumerate(("hvorg3",)):
+    this_event = hvos.hv_project_dates[event]
+    if edit == 0:
+        ax.axvline(parse_time(this_event["date"]), **this_event["kwargs"])
+    elif edit == 1:
+        t = parse_time(this_event["date"])
+        t_pd = str(t.date())
+        y = h.loc[t_pd, data_product]
+        if y <= 0.1 * max(h[data_product]):
+            y = (0.2 + i*0.2) * max(h[data_product])
+        plt.axvline(t, color='r', linestyle=":", linewidth=0.5)
+        plt.text(t, y, this_event["label"], **this_event["kwargs_text"])
 
 # Solar physics events
-for event in ("june7_event", "comet_ison", "flare_flurry2017"):
-    ax.axvline(parse_time(hvos.solar_physics_events[event]["date"]),
-               **hvos.solar_physics_events[event]["kwargs"])
+for i, event in enumerate(("june7_event", "comet_ison", "flare_flurry2017")):
+    this_event = hvos.solar_physics_events[event]
+    if edit == 0:
+        ax.axvline(parse_time(this_event["date"]), **this_event["kwargs"])
+    elif edit == 1:
+        t = parse_time(this_event["date"])
+        t_pd = str(t.date())
+        y = h.loc[t_pd, data_product]
+        if event == "june7_event":
+            y = 1.25*y
+        if y <= 0.1 * max(h[data_product]):
+            y = (0.2 + i*0.2) * max(h[data_product])
+        plt.axvline(t, color='r', linestyle=":", linewidth=0.5)
+        plt.text(t, y, this_event["label"], **this_event["kwargs_text"])
+
+
+
+
 plt.grid('on', linestyle='dotted')
 plt.legend(framealpha=0.8, facecolor='y', fontsize=9)
 plt.tight_layout()
